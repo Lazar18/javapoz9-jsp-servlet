@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class HelloServlet extends HttpServlet {
+public class CalcServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        String nameToDisplay = StringUtils.isEmpty(name) ? "Anonymous" : name;
+        String displayA = (req.getParameter("a"));
+        String displayB = (req.getParameter("b"));
+
+        int a = StringUtils.isNumeric(displayA)? Integer.parseInt(displayA) : 0;
+        int b = StringUtils.isNumeric(displayB)? Integer.parseInt(displayB) : 0;
 
         PrintWriter writer = resp.getWriter();
-        writer.println("<h1>Hello " + nameToDisplay + "</h1>");
+        writer.println("<h1> Wynik: " + a + " + " + b + " = " + (a + b) + "</h1");
     }
 }
