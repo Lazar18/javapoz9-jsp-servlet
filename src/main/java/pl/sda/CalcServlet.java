@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 public class CalcServlet extends HttpServlet {
     @Override
@@ -18,20 +19,23 @@ public class CalcServlet extends HttpServlet {
         int a = StringUtils.isNumeric(displayA) ? Integer.parseInt(displayA) : 0;
         int b = StringUtils.isNumeric(displayB) ? Integer.parseInt(displayB) : 0;
 
-        CalculationResult result = calculate(req.getPathInfo(), a, b);
+
+        String operation = Optional.ofNullable(req.getPathInfo())
+                .orElse(req.getParameter("operation"));
+        CalculationResult result = calculate(operation, a, b);
 
         PrintWriter writer = resp.getWriter();
         writer.println("<h1> Wynik: " + result.resultRepresentation + "</h1");
     }
 
-    private CalculationResult calculate(String path, int a, int b) {
-        if (path.endsWith("add")) {
+    private CalculationResult calculate(String operation, int a, int b) {
+        if (operation.endsWith("add")) {
             return new CalculationResult(a + b,
                     a + " + " + b + " = " + (a + b));
-        } else if (path.endsWith("substract")) {
+        } else if (operation.endsWith("subtract")) {
             return new CalculationResult(a - b,
                     a + " - " + b + " = " + (a - b));
-        } else if (path.endsWith("multiply")) {
+        } else if (operation.endsWith("multiply")) {
             return new CalculationResult(a * b,
                     a + " * " + b + " = " + (a * b));
         } else {
