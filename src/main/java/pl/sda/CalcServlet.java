@@ -15,10 +15,45 @@ public class CalcServlet extends HttpServlet {
         String displayA = (req.getParameter("a"));
         String displayB = (req.getParameter("b"));
 
-        int a = StringUtils.isNumeric(displayA)? Integer.parseInt(displayA) : 0;
-        int b = StringUtils.isNumeric(displayB)? Integer.parseInt(displayB) : 0;
+        int a = StringUtils.isNumeric(displayA) ? Integer.parseInt(displayA) : 0;
+        int b = StringUtils.isNumeric(displayB) ? Integer.parseInt(displayB) : 0;
+
+        CalculationResult result = calculate(req.getPathInfo(), a, b);
 
         PrintWriter writer = resp.getWriter();
-        writer.println("<h1> Wynik: " + a + " + " + b + " = " + (a + b) + "</h1");
+        writer.println("<h1> Wynik: " + result.resultRepresentation + "</h1");
+    }
+
+    private CalculationResult calculate(String path, int a, int b) {
+        if (path.endsWith("add")) {
+            return new CalculationResult(a + b,
+                    a + " + " + b + " = " + (a + b));
+        } else if (path.endsWith("substract")) {
+            return new CalculationResult(a - b,
+                    a + " - " + b + " = " + (a - b));
+        } else if (path.endsWith("multiply")) {
+            return new CalculationResult(a * b,
+                    a + " * " + b + " = " + (a * b));
+        } else {
+            return new CalculationResult(0, "Unsupported operation");
+        }
+    }
+
+    private static class CalculationResult {
+        private Integer result;
+        private String resultRepresentation;
+
+        public CalculationResult(Integer result, String resultRepresentation) {
+            this.result = result;
+            this.resultRepresentation = resultRepresentation;
+        }
+
+        public Integer getResult() {
+            return result;
+        }
+
+        public String getResultRepresentation() {
+            return resultRepresentation;
+        }
     }
 }
