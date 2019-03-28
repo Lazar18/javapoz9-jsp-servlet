@@ -31,4 +31,15 @@
         <servlet-name>CalcFormServlet</servlet-name>
         <url-pattern>/calc-form</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>BooksServlet</servlet-name>
+        <servlet-class>pl.sda.books.application.BooksServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BooksServlet</servlet-name>
+        <url-pattern>/books</url-pattern>
+    </servlet-mapping>
 </web-app>

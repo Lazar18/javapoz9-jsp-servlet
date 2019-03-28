@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 public class CalcFormServlet extends HttpServlet {
     @Override
@@ -13,12 +14,17 @@ public class CalcFormServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
 
         writer.println("<div>");
+        Optional<String> error_message = Optional.ofNullable(req.getParameter("error_message"));
+//        if (error_message.isPresent()) {
+//            writer.print("<h1 style = \"color: red;\">" + error_message.get() + "</h1>");
+//        }
+        error_message.ifPresent(e -> writer.println("<h1 style=\"color: red;\">" + e + "</h1>"));
         writer.println("<form method=\"GET\" action= \"calc\">");
         writer.println("<input type = \"number\" name = \"a\" label = \"number\"/>");
         writer.println("<select name = \"operation\">");
-        writer.println(     "<option value = \"add\">+<option");
-        writer.println(     "<option value = \"subtract\">-<option");
-        writer.println(     "<option value = \"multiply\">*<option");
+        writer.println("<option value = \"add\">+<option");
+        writer.println("<option value = \"subtract\">-<option");
+        writer.println("<option value = \"multiply\">*<option");
         writer.println("</select>");
         writer.println("<input type = \"number\" name = \"b\" label = \"number\"/>");
         writer.println("<input type = \"submit\" value = \"submit\"/>");

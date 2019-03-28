@@ -24,40 +24,40 @@ public class CalcServlet extends HttpServlet {
                 .orElse(req.getParameter("operation"));
         CalculationResult result = calculate(operation, a, b);
 
-        PrintWriter writer = resp.getWriter();
-        writer.println("<h1> Wynik: " + result.resultRepresentation + "</h1");
+        if (!result.calculated) {
+//            resp.setStatus(301);
+//            resp.addHeader("Location", req.getContextPath() + "/calc-form");
+            resp.sendRedirect(req.getContextPath() + "/calc-form?error_message=" + result.resultRepresentation);
+        } else {
+            PrintWriter writer = resp.getWriter();
+            writer.println("<h1> Wynik: " + result.resultRepresentation + "</h1");
+        }
     }
 
     private CalculationResult calculate(String operation, int a, int b) {
         if (operation.endsWith("add")) {
             return new CalculationResult(a + b,
-                    a + " + " + b + " = " + (a + b));
+                    a + " + " + b + " = " + (a + b), true);
         } else if (operation.endsWith("subtract")) {
             return new CalculationResult(a - b,
-                    a + " - " + b + " = " + (a - b));
+                    a + " - " + b + " = " + (a - b), true);
         } else if (operation.endsWith("multiply")) {
             return new CalculationResult(a * b,
-                    a + " * " + b + " = " + (a * b));
+                    a + " * " + b + " = " + (a * b), true);
         } else {
-            return new CalculationResult(0, "Unsupported operation");
+            return new CalculationResult(0, "Unsupported operation", false);
         }
     }
 
     private static class CalculationResult {
         private Integer result;
         private String resultRepresentation;
+        private boolean calculated;
 
-        public CalculationResult(Integer result, String resultRepresentation) {
+        public CalculationResult(Integer result, String resultRepresentation, boolean calculated) {
             this.result = result;
             this.resultRepresentation = resultRepresentation;
-        }
-
-        public Integer getResult() {
-            return result;
-        }
-
-        public String getResultRepresentation() {
-            return resultRepresentation;
+            this.calculated = calculated;
         }
     }
 }
